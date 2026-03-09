@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track 1: Response Prediction - Predictive AI Evaluation Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">Predictive Eval Challenge</a>
+            <div class="mobile-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="track1.html">Track 1</a></li>
+                <li><a href="track2.html">Track 2</a></li>
+                <li><a href="getting_started.html">Getting Started</a></li>
+                <li><a href="leaderboard.html">Leaderboard</a></li>
+                <li><a href="rules.html">Rules</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Track 1 Hero -->
+    <section class="hero" style="height: auto; padding: 8rem 0 4rem; background: linear-gradient(135deg, #1a2744 0%, #2c5282 60%, #2b6cb0 100%);">
+        <div class="container text-center">
+            <div style="font-size: 4rem; margin-bottom: 1.5rem;">
+                <i class="fas fa-table-cells"></i>
+            </div>
+            <h1 class="hero-title">Track 1: Response Prediction</h1>
+            <p class="hero-tagline">Matrix completion for AI evaluation</p>
+            <p class="hero-description" style="text-align: left; background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 12px; backdrop-filter: blur(10px);">
+                Given a partially observed binary response matrix (models x items), predict the held-out entries.
+                Each entry indicates whether a model answered an evaluation item correctly (1) or incorrectly (0).
+                This is a structured matrix completion problem with binary outcomes, where rich metadata about
+                both models and items is available to inform predictions.
+            </p>
+            <div class="scroll-indicator" onclick="document.getElementById('task-details').scrollIntoView({behavior: 'smooth'})">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Task Details -->
+    <section id="task-details">
+        <div class="container">
+            <h2 class="text-center mb-2">Task Details</h2>
+            <div class="card">
+                <h3><i class="fas fa-bullseye" style="color: var(--secondary-color);"></i> Objective</h3>
+                <p>
+                    You are given a sparse binary matrix <strong>R</strong> of shape (M models x N items), where observed
+                    entries are 0 or 1 indicating incorrect or correct responses. Your goal is to predict the probability
+                    of correctness for each held-out (unobserved) entry.
+                </p>
+
+                <h3 class="mt-2"><i class="fas fa-database" style="color: var(--secondary-color);"></i> Available Data</h3>
+                <ul>
+                    <li><strong>Response matrix:</strong> Partially observed binary matrix (models x items)</li>
+                    <li><strong>Model metadata:</strong> Model size (parameters), release date, organization, model family</li>
+                    <li><strong>Item metadata:</strong> Item text embeddings, benchmark category, difficulty estimates</li>
+                </ul>
+
+                <h3 class="mt-2"><i class="fas fa-chart-line" style="color: var(--secondary-color);"></i> Evaluation Metrics</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+                    <div class="metric-card">
+                        <div class="metric-value">AUC-ROC</div>
+                        <div class="metric-label">Primary Metric</div>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--gray-600);">
+                            Area under the receiver operating characteristic curve, measuring discriminative ability of predicted probabilities.
+                        </p>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">Log-Loss</div>
+                        <div class="metric-label">Secondary Metric</div>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--gray-600);">
+                            Binary cross-entropy loss, measuring calibration quality of predicted probabilities.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Suggested Approaches -->
+    <section style="background-color: var(--gray-100);">
+        <div class="container">
+            <h2 class="text-center mb-2">Suggested Approaches</h2>
+            <p class="text-center mb-2" style="max-width: 700px; margin: 0 auto; color: var(--gray-600);">
+                Participants are free to use any method. Here are some starting points from the literature.
+            </p>
+            <div class="grid-3">
+                <div class="card" style="text-align: center;">
+                    <h3 style="color: var(--secondary-color);">IRT Models</h3>
+                    <p>Classic psychometric models: Rasch (1PL), 2PL, 3PL, and their modern variants like Beta-IRT and Amortized IRT.</p>
+                    <div>
+                        <span class="approach-tag">Rasch</span>
+                        <span class="approach-tag">2PL / 3PL</span>
+                        <span class="approach-tag">Beta-IRT</span>
+                    </div>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <h3 style="color: var(--secondary-color);">Matrix Factorization</h3>
+                    <p>Low-rank decompositions and collaborative filtering approaches adapted for binary outcomes with side information.</p>
+                    <div>
+                        <span class="approach-tag">SVD</span>
+                        <span class="approach-tag">NMF</span>
+                        <span class="approach-tag">Side Information</span>
+                    </div>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <h3 style="color: var(--secondary-color);">Neural / Hybrid</h3>
+                    <p>Neural latent variable models, deep matrix factorization, and ensemble methods combining multiple approaches.</p>
+                    <div>
+                        <span class="approach-tag">VAE</span>
+                        <span class="approach-tag">Neural CF</span>
+                        <span class="approach-tag">Ensemble</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Submission -->
+    <section>
+        <div class="container">
+            <h2 class="text-center mb-2">Submission Format</h2>
+            <div class="card">
+                <h3>How to Submit</h3>
+                <p>
+                    Submit a CSV file containing your predicted probabilities for each held-out entry in the response matrix.
+                </p>
+
+                <h4 class="mt-2">CSV Format</h4>
+                <div class="code-block-container">
+                    <pre><code>model_id,item_id,predicted_probability
+model_001,item_042,0.8734
+model_001,item_105,0.2156
+model_003,item_042,0.9512
+...</code></pre>
+                </div>
+
+                <div class="info-box mt-2">
+                    <p>
+                        <strong><i class="fas fa-info-circle"></i> Submission Options:</strong>
+                        <strong>Default track:</strong> CSV upload (prediction only).
+                        <strong>Advanced track:</strong> Docker container (code submission).
+                        <strong>LLM featurizer:</strong> Upload model to HuggingFace + config with pinned commit hash.
+                    </p>
+                </div>
+
+                <div class="text-center mt-2">
+                    <a href="https://www.codabench.org/competitions/predictive-eval-challenge/" class="btn btn-primary btn-large" target="_blank">
+                        <i class="fas fa-upload"></i>
+                        Submit on Codabench
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>Predictive Eval Challenge</h3>
+                    <p>Reframing AI evaluation as a prediction problem. Can we predict unobserved model-item outcomes from partial observations?</p>
+                    <div class="social-links mt-1">
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-x-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="track1.html">Track 1</a></li>
+                        <li><a href="track2.html">Track 2</a></li>
+                        <li><a href="getting_started.html">Getting Started</a></li>
+                        <li><a href="leaderboard.html">Leaderboard</a></li>
+                        <li><a href="rules.html">Rules</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <p>For questions or support:</p>
+                    <p>Email: sttruong@stanford.edu</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 The Predictive AI Evaluation Challenge. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        const mobileToggle = document.querySelector('.mobile-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        mobileToggle.addEventListener('click', () => { navMenu.classList.toggle('active'); });
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => { navMenu.classList.remove('active'); });
+        });
+    </script>
+</body>
+</html>

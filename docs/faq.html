@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Predictive AI Evaluation Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">Predictive Eval Challenge</a>
+            <div class="mobile-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="track1.html">Track 1</a></li>
+                <li><a href="track2.html">Track 2</a></li>
+                <li><a href="getting_started.html">Getting Started</a></li>
+                <li><a href="leaderboard.html">Leaderboard</a></li>
+                <li><a href="rules.html">Rules</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- FAQ Section -->
+    <section id="faq" style="margin-top: 70px; padding-top: 3rem;">
+        <div class="container">
+            <h2 class="text-center mb-2">Frequently Asked Questions</h2>
+
+            <!-- General -->
+            <h3 style="color: var(--secondary-color); margin-top: 2rem; margin-bottom: 1rem;">
+                <i class="fas fa-circle-question"></i> General
+            </h3>
+
+            <div class="faq-item" id="what-is-predictive-eval">
+                <div class="faq-question">
+                    <span>What is predictive evaluation?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Predictive evaluation reframes AI evaluation as a prediction and forecasting problem rather than exhaustive testing. Instead of running every model on every benchmark (which is increasingly infeasible), we predict how models would perform on evaluations they haven't been tested on, using partial observations and metadata. This is analogous to how Item Response Theory in psychometrics can estimate a student's ability from a subset of test items.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" id="what-is-torch-measure">
+                <div class="faq-question">
+                    <span>What is torch_measure?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p><code>torch_measure</code> is an open-source PyTorch toolkit for measurement models applied to AI evaluation. It provides implementations of Item Response Theory (IRT) models (Rasch, 2PL, 3PL, Beta-IRT), factor analysis, and other latent variable models specifically designed for analyzing AI evaluation data. The toolkit includes dataset loaders, baseline implementations, and evaluation utilities for this competition.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" id="who-can-participate">
+                <div class="faq-question">
+                    <span>Who can participate?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>The competition is open to everyone -- academic researchers, industry practitioners, and independent participants. Teams of up to 5 members are allowed. You may participate in one or both tracks.</p>
+                </div>
+            </div>
+
+            <!-- Technical -->
+            <h3 style="color: var(--secondary-color); margin-top: 2rem; margin-bottom: 1rem;">
+                <i class="fas fa-gear"></i> Technical
+            </h3>
+
+            <div class="faq-item" id="need-gpu">
+                <div class="faq-question">
+                    <span>Do I need a GPU?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>No. All tasks in both tracks are solvable on CPU. The baseline IRT models (Rasch, 2PL, 3PL) typically train in minutes on a modern CPU. A GPU will speed up training for larger neural models (VAEs, amortized IRT, deep matrix factorization) but is not required for competitive submissions.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" id="llm-featurizer">
+                <div class="faq-question">
+                    <span>Can I use an LLM as a featurizer?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes. If you want to use an LLM to generate features (e.g., embedding evaluation items or model descriptions), you can upload your model to HuggingFace and submit a configuration file with a pinned commit hash. Important constraints:</p>
+                    <ul>
+                        <li>No <code>trust_remote_code</code> -- your model must use standard HuggingFace architectures</li>
+                        <li>Safetensors format only (no pickle-based model files)</li>
+                        <li>Evaluation runs air-gapped -- your model will be downloaded before evaluation and run without network access</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" id="data-format">
+                <div class="faq-question">
+                    <span>What format is the evaluation data in?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>The core data is a binary response matrix of shape (M models x N items), where each entry is 0 (incorrect) or 1 (correct). The matrix is partially observed -- your task is to predict the held-out entries (Track 1) or estimate robust ability scores from potentially contaminated data (Track 2). Additional metadata includes model attributes (size, organization, release date) and item attributes (text embeddings, benchmark category).</p>
+                </div>
+            </div>
+
+            <div class="faq-item" id="what-is-contamination">
+                <div class="faq-question">
+                    <span>What is benchmark contamination (Track 2)?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Benchmark contamination occurs when a model has been exposed to test data during training. This leads to artificially inflated scores on those specific items that do not reflect the model's true capabilities. In Track 2, the training data explicitly includes a mixture of genuine and contaminated responses. Your scoring method must detect and account for this contamination to produce trustworthy ability estimates.</p>
+                </div>
+            </div>
+
+            <!-- Submission -->
+            <h3 style="color: var(--secondary-color); margin-top: 2rem; margin-bottom: 1rem;">
+                <i class="fas fa-upload"></i> Submissions
+            </h3>
+
+            <div class="faq-item" id="leaderboard-scored">
+                <div class="faq-question">
+                    <span>How is the leaderboard scored?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Each track has a separate leaderboard with its own primary metric:</p>
+                    <ul>
+                        <li><strong>Track 1 (Response Prediction):</strong> AUC-ROC on held-out entries. Higher is better.</li>
+                        <li><strong>Track 2 (Robust Scoring):</strong> Kendall's tau between predicted scores and ground-truth ability ranking. Higher is better.</li>
+                    </ul>
+                    <p>Both leaderboards use a public/private split. The public leaderboard (visible during the competition) uses a subset of the test data. Final rankings are determined by the private leaderboard, revealed after the competition ends.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" id="submission-limits">
+                <div class="faq-question">
+                    <span>How many submissions can I make?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>During the competition, each team may submit up to <strong>2 submissions per day</strong>. After the competition deadline, up to <strong>2 submissions per week</strong> are allowed for the post-competition leaderboard. Plan your submissions carefully to make the most of your daily quota.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" id="submission-formats">
+                <div class="faq-question">
+                    <span>What are the submission options?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Three submission tracks are available:</p>
+                    <ul>
+                        <li><strong>Default (CSV upload):</strong> Upload your predictions as a CSV file. This is the simplest option.</li>
+                        <li><strong>Advanced (Code submission):</strong> Submit a Docker container with your full pipeline for reproducible evaluation.</li>
+                        <li><strong>LLM Featurizer:</strong> Upload a model to HuggingFace and submit a config file with a pinned commit hash.</li>
+                    </ul>
+                    <p>See the <a href="getting_started.html">Getting Started</a> page for detailed formatting instructions.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" id="open-source">
+                <div class="faq-question">
+                    <span>Do I need to open-source my solution?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Only winning solutions are required to be open-sourced (within 30 days of the competition ending). However, we strongly encourage all participants to share their code and methods to advance the field of predictive AI evaluation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>Predictive Eval Challenge</h3>
+                    <p>Reframing AI evaluation as a prediction problem. Can we predict unobserved model-item outcomes from partial observations?</p>
+                    <div class="social-links mt-1">
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-x-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="track1.html">Track 1</a></li>
+                        <li><a href="track2.html">Track 2</a></li>
+                        <li><a href="getting_started.html">Getting Started</a></li>
+                        <li><a href="leaderboard.html">Leaderboard</a></li>
+                        <li><a href="rules.html">Rules</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <p>For questions or support:</p>
+                    <p>Email: sttruong@stanford.edu</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 The Predictive AI Evaluation Challenge. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        const mobileToggle = document.querySelector('.mobile-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        mobileToggle.addEventListener('click', () => { navMenu.classList.toggle('active'); });
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => { navMenu.classList.remove('active'); });
+        });
+
+        // FAQ accordion
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                question.classList.toggle('active');
+            });
+        });
+
+        // Auto-expand FAQ section if linked directly
+        function expandFAQFromHash() {
+            const hash = window.location.hash;
+            if (hash) {
+                const targetElement = document.querySelector(hash);
+                if (targetElement && targetElement.classList.contains('faq-item')) {
+                    const question = targetElement.querySelector('.faq-question');
+                    if (question) {
+                        question.classList.add('active');
+                        setTimeout(() => {
+                            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 100);
+                    }
+                }
+            }
+        }
+
+        expandFAQFromHash();
+        window.addEventListener('hashchange', expandFAQFromHash);
+    </script>
+</body>
+</html>

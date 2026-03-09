@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - Predictive AI Evaluation Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">Predictive Eval Challenge</a>
+            <div class="mobile-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="track1.html">Track 1</a></li>
+                <li><a href="track2.html">Track 2</a></li>
+                <li><a href="getting_started.html">Getting Started</a></li>
+                <li><a href="leaderboard.html">Leaderboard</a></li>
+                <li><a href="rules.html">Rules</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Leaderboard Section -->
+    <section id="leaderboard" style="background-color: var(--gray-100); margin-top: 70px; padding-top: 3rem;">
+        <div class="container">
+            <h2 class="text-center mb-2">Leaderboard</h2>
+            <p class="text-center mb-2" style="color: var(--gray-600);">
+                Current rankings for both competition tracks. The public leaderboard is updated after each submission.
+                Final rankings will use a separate private test set.
+            </p>
+
+            <!-- Tab Navigation -->
+            <div class="tab-container mb-2">
+                <button class="tab-button active" onclick="switchTab('track1')">Track 1: Response Prediction</button>
+                <button class="tab-button" onclick="switchTab('track2')">Track 2: Robust Scoring</button>
+            </div>
+
+            <!-- Track 1 Leaderboard -->
+            <div id="tab-track1" class="tab-content active">
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+                        <h3 style="margin: 0;">Track 1: Response Prediction</h3>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <span class="approach-tag" style="background: var(--secondary-color); color: white;">Primary: AUC-ROC</span>
+                            <span class="approach-tag">Secondary: Log-Loss</span>
+                        </div>
+                    </div>
+
+                    <div class="info-box" style="margin-bottom: 1.5rem;">
+                        <p>
+                            <i class="fas fa-info-circle"></i>
+                            The competition has not yet started. Leaderboard entries will appear here once submissions open.
+                            Check back soon!
+                        </p>
+                    </div>
+
+                    <div class="dataset-table">
+                        <table class="leaderboard-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 60px;">Rank</th>
+                                    <th>Team</th>
+                                    <th>AUC-ROC</th>
+                                    <th>Log-Loss</th>
+                                    <th>Submissions</th>
+                                    <th>Last Updated</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 3rem; color: var(--gray-500);">
+                                        <i class="fas fa-hourglass-half" style="font-size: 2rem; display: block; margin-bottom: 1rem;"></i>
+                                        No submissions yet. Be the first to submit!
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Track 2 Leaderboard -->
+            <div id="tab-track2" class="tab-content">
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+                        <h3 style="margin: 0;">Track 2: Robust Scoring</h3>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <span class="approach-tag" style="background: var(--secondary-color); color: white;">Primary: Kendall's Tau</span>
+                            <span class="approach-tag">Secondary: Spearman's Rho</span>
+                        </div>
+                    </div>
+
+                    <div class="info-box" style="margin-bottom: 1.5rem;">
+                        <p>
+                            <i class="fas fa-info-circle"></i>
+                            The competition has not yet started. Leaderboard entries will appear here once submissions open.
+                            Check back soon!
+                        </p>
+                    </div>
+
+                    <div class="dataset-table">
+                        <table class="leaderboard-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 60px;">Rank</th>
+                                    <th>Team</th>
+                                    <th>Kendall's Tau</th>
+                                    <th>Spearman's Rho</th>
+                                    <th>Test-Retest</th>
+                                    <th>Last Updated</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 3rem; color: var(--gray-500);">
+                                        <i class="fas fa-hourglass-half" style="font-size: 2rem; display: block; margin-bottom: 1rem;"></i>
+                                        No submissions yet. Be the first to submit!
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leaderboard Info -->
+            <div class="card mt-2">
+                <h3>How the Leaderboard Works</h3>
+                <div class="grid-2" style="margin-top: 1rem;">
+                    <div>
+                        <h4><i class="fas fa-eye" style="color: var(--secondary-color);"></i> Public Leaderboard</h4>
+                        <p>Evaluated on a public subset of the held-out data. Visible throughout the competition to help you track progress.</p>
+                    </div>
+                    <div>
+                        <h4><i class="fas fa-lock" style="color: var(--secondary-color);"></i> Private Leaderboard</h4>
+                        <p>Evaluated on a separate private test set. Revealed only after the competition ends. Final rankings are determined by the private leaderboard.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-2" style="padding-bottom: 2rem;">
+                <a href="https://www.codabench.org/competitions/predictive-eval-challenge/" class="btn btn-primary btn-large" target="_blank">
+                    <i class="fas fa-upload"></i>
+                    Submit on Codabench
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>Predictive Eval Challenge</h3>
+                    <p>Reframing AI evaluation as a prediction problem. Can we predict unobserved model-item outcomes from partial observations?</p>
+                    <div class="social-links mt-1">
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-x-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="track1.html">Track 1</a></li>
+                        <li><a href="track2.html">Track 2</a></li>
+                        <li><a href="getting_started.html">Getting Started</a></li>
+                        <li><a href="leaderboard.html">Leaderboard</a></li>
+                        <li><a href="rules.html">Rules</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <p>For questions or support:</p>
+                    <p>Email: sttruong@stanford.edu</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 The Predictive AI Evaluation Challenge. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        const mobileToggle = document.querySelector('.mobile-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        mobileToggle.addEventListener('click', () => { navMenu.classList.toggle('active'); });
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => { navMenu.classList.remove('active'); });
+        });
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            // Deactivate all tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            // Show selected tab
+            document.getElementById('tab-' + tabName).classList.add('active');
+            // Activate clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

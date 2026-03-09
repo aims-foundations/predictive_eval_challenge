@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track 2: Robust Scoring - Predictive AI Evaluation Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">Predictive Eval Challenge</a>
+            <div class="mobile-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="track1.html">Track 1</a></li>
+                <li><a href="track2.html">Track 2</a></li>
+                <li><a href="getting_started.html">Getting Started</a></li>
+                <li><a href="leaderboard.html">Leaderboard</a></li>
+                <li><a href="rules.html">Rules</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Track 2 Hero -->
+    <section class="hero" style="height: auto; padding: 8rem 0 4rem; background: linear-gradient(135deg, #1a2744 0%, #2c5282 40%, #285e61 100%);">
+        <div class="container text-center">
+            <div style="font-size: 4rem; margin-bottom: 1.5rem;">
+                <i class="fas fa-shield-halved"></i>
+            </div>
+            <h1 class="hero-title">Track 2: Robust Scoring</h1>
+            <p class="hero-tagline">Trustworthy ability estimation under contamination</p>
+            <p class="hero-description" style="text-align: left; background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 12px; backdrop-filter: blur(10px);">
+                Produce scalar ability scores for language models that remain stable even when benchmark data
+                is contaminated. Training data includes mixtures of genuine responses and artificially inflated
+                results. Your scoring method must detect and account for contamination to recover trustworthy
+                rankings of model capabilities.
+            </p>
+            <div class="scroll-indicator" onclick="document.getElementById('task-details').scrollIntoView({behavior: 'smooth'})">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Task Details -->
+    <section id="task-details">
+        <div class="container">
+            <h2 class="text-center mb-2">Task Details</h2>
+            <div class="card">
+                <h3><i class="fas fa-bullseye" style="color: var(--secondary-color);"></i> Objective</h3>
+                <p>
+                    Given evaluation data that contains a mixture of genuine responses and artificially inflated
+                    results (from benchmark contamination), produce a single scalar ability score for each model.
+                    These scores should reflect true model capabilities and be robust to the contamination present
+                    in the data.
+                </p>
+
+                <h3 class="mt-2"><i class="fas fa-exclamation-triangle" style="color: #d69e2e;"></i> The Contamination Problem</h3>
+                <p>
+                    Benchmark contamination occurs when a model has been exposed to test data during training,
+                    leading to artificially inflated performance on those specific items. The training data for
+                    this track explicitly includes such contaminated responses. Your method must identify which
+                    responses are likely genuine and which are inflated, producing scores that would match the
+                    models' true abilities on clean data.
+                </p>
+
+                <h3 class="mt-2"><i class="fas fa-database" style="color: var(--secondary-color);"></i> Available Data</h3>
+                <ul>
+                    <li><strong>Response data:</strong> Binary response matrix with mixtures of genuine and contaminated entries</li>
+                    <li><strong>Model metadata:</strong> Model size, release date, organization, training details</li>
+                    <li><strong>Item metadata:</strong> Benchmark category, estimated difficulty, text embeddings</li>
+                    <li><strong>Temporal signals:</strong> When models were released relative to benchmark publication dates</li>
+                </ul>
+
+                <h3 class="mt-2"><i class="fas fa-chart-line" style="color: var(--secondary-color);"></i> Evaluation Metrics</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+                    <div class="metric-card">
+                        <div class="metric-value">Kendall's Tau</div>
+                        <div class="metric-label">Primary Metric</div>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--gray-600);">
+                            Rank correlation between predicted scores and ground-truth ability ordering.
+                        </p>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">Spearman's Rho</div>
+                        <div class="metric-label">Secondary Metric</div>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--gray-600);">
+                            Rank correlation coefficient for evaluating score rankings.
+                        </p>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">Test-Retest</div>
+                        <div class="metric-label">Secondary Metric</div>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--gray-600);">
+                            Reliability of scores across different subsets of evaluation items.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Suggested Approaches -->
+    <section style="background-color: var(--gray-100);">
+        <div class="container">
+            <h2 class="text-center mb-2">Suggested Approaches</h2>
+            <p class="text-center mb-2" style="max-width: 700px; margin: 0 auto; color: var(--gray-600);">
+                Multiple strategies exist for handling contaminated evaluation data. Here are some starting points.
+            </p>
+            <div class="grid-2">
+                <div class="card">
+                    <h3 style="color: var(--secondary-color);"><i class="fas fa-vials"></i> Mixture Models</h3>
+                    <p>Model each response as coming from either a genuine or contaminated distribution. Use EM or variational inference to identify and down-weight contaminated responses.</p>
+                    <div>
+                        <span class="approach-tag">EM Algorithm</span>
+                        <span class="approach-tag">Variational Inference</span>
+                        <span class="approach-tag">Beta-Binomial</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 style="color: var(--secondary-color);"><i class="fas fa-clock"></i> Temporal Priors</h3>
+                    <p>Leverage release dates and benchmark publication timelines. Models released after a benchmark was published are more likely to have contaminated results on that benchmark.</p>
+                    <div>
+                        <span class="approach-tag">Bayesian Priors</span>
+                        <span class="approach-tag">Time Series</span>
+                        <span class="approach-tag">Changepoint Detection</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 style="color: var(--secondary-color);"><i class="fas fa-search"></i> Item-Level Anomaly Detection</h3>
+                    <p>Identify items where specific models perform suspiciously well compared to expectations from their overall ability profile. Flag and adjust for these anomalies.</p>
+                    <div>
+                        <span class="approach-tag">Residual Analysis</span>
+                        <span class="approach-tag">Outlier Detection</span>
+                        <span class="approach-tag">Person-Fit Statistics</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 style="color: var(--secondary-color);"><i class="fas fa-brain"></i> Contamination-Aware IRT</h3>
+                    <p>Extend classical IRT models to explicitly model contamination as a latent variable, jointly estimating ability, item parameters, and contamination indicators.</p>
+                    <div>
+                        <span class="approach-tag">Modified IRT</span>
+                        <span class="approach-tag">Latent Classes</span>
+                        <span class="approach-tag">Robust Estimation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Submission -->
+    <section>
+        <div class="container">
+            <h2 class="text-center mb-2">Submission Format</h2>
+            <div class="card">
+                <h3>How to Submit</h3>
+                <p>
+                    Submit a CSV file containing a scalar ability score for each model in the evaluation set.
+                </p>
+
+                <h4 class="mt-2">CSV Format</h4>
+                <div class="code-block-container">
+                    <pre><code>model_id,ability_score
+model_001,2.453
+model_002,1.872
+model_003,3.105
+model_004,0.614
+...</code></pre>
+                </div>
+
+                <div class="info-box mt-2">
+                    <p>
+                        <strong><i class="fas fa-info-circle"></i> Note:</strong>
+                        Scores can be on any scale. Only the ranking matters for the primary metric (Kendall's tau).
+                        However, well-calibrated scores on a meaningful scale may receive additional recognition.
+                    </p>
+                </div>
+
+                <div class="text-center mt-2">
+                    <a href="https://www.codabench.org/competitions/predictive-eval-challenge/" class="btn btn-primary btn-large" target="_blank">
+                        <i class="fas fa-upload"></i>
+                        Submit on Codabench
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>Predictive Eval Challenge</h3>
+                    <p>Reframing AI evaluation as a prediction problem. Can we predict unobserved model-item outcomes from partial observations?</p>
+                    <div class="social-links mt-1">
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-x-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="track1.html">Track 1</a></li>
+                        <li><a href="track2.html">Track 2</a></li>
+                        <li><a href="getting_started.html">Getting Started</a></li>
+                        <li><a href="leaderboard.html">Leaderboard</a></li>
+                        <li><a href="rules.html">Rules</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <p>For questions or support:</p>
+                    <p>Email: sttruong@stanford.edu</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 The Predictive AI Evaluation Challenge. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        const mobileToggle = document.querySelector('.mobile-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        mobileToggle.addEventListener('click', () => { navMenu.classList.toggle('active'); });
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => { navMenu.classList.remove('active'); });
+        });
+    </script>
+</body>
+</html>

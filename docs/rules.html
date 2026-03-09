@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rules - Predictive AI Evaluation Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">Predictive Eval Challenge</a>
+            <div class="mobile-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="track1.html">Track 1</a></li>
+                <li><a href="track2.html">Track 2</a></li>
+                <li><a href="getting_started.html">Getting Started</a></li>
+                <li><a href="leaderboard.html">Leaderboard</a></li>
+                <li><a href="rules.html">Rules</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main style="margin-top: 100px; padding: 2rem 0;">
+        <div class="container">
+            <div class="card">
+                <h1 class="text-center mb-2">Official Competition Rules</h1>
+
+                <div class="warning-box">
+                    <strong><i class="fas fa-exclamation-triangle"></i> IMPORTANT</strong> -- By submitting to this competition, you agree to abide by all rules listed below. Violations may result in disqualification.
+                </div>
+
+                <h2>1. Eligibility</h2>
+                <ul>
+                    <li>The competition is open to all individuals and teams, both academic and industry.</li>
+                    <li>Teams may have up to <strong>5 members</strong>.</li>
+                    <li>Organizers and their immediate family members may not participate for prizes.</li>
+                    <li>Participants must be at least 18 years of age.</li>
+                </ul>
+
+                <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--gray-300);">
+
+                <h2>2. Competition Tracks</h2>
+                <p>The competition comprises two tracks:</p>
+                <ul>
+                    <li><strong>Track 1 -- Response Prediction:</strong> Predict held-out entries in a binary response matrix. Primary metric: AUC-ROC.</li>
+                    <li><strong>Track 2 -- Robust Scoring:</strong> Produce contamination-robust ability scores. Primary metric: Kendall's tau.</li>
+                </ul>
+                <p>Teams may participate in one or both tracks. Rankings and prizes are awarded per track.</p>
+
+                <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--gray-300);">
+
+                <h2>3. Submission Limits</h2>
+                <ul>
+                    <li><strong>During competition:</strong> Each team may submit up to <strong>2 submissions per day</strong>.</li>
+                    <li><strong>Post-competition:</strong> Up to <strong>2 submissions per week</strong> for the post-competition phase.</li>
+                    <li>Teams may select their best submission as their final entry before the deadline.</li>
+                </ul>
+
+                <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--gray-300);">
+
+                <h2>4. Submission Formats</h2>
+                <h3>4.1 Default Track (CSV Upload)</h3>
+                <ul>
+                    <li><strong>Track 1:</strong> CSV with columns <code>model_id, item_id, predicted_probability</code></li>
+                    <li><strong>Track 2:</strong> CSV with columns <code>model_id, ability_score</code></li>
+                </ul>
+
+                <h3>4.2 Advanced Track (Code Submission)</h3>
+                <ul>
+                    <li>Submit a Docker container with your complete pipeline.</li>
+                    <li>Two-stage air-gapped evaluation: your code runs in an isolated environment without network access.</li>
+                    <li>Container must produce the required CSV output format.</li>
+                </ul>
+
+                <h3>4.3 LLM Featurizer Approach</h3>
+                <ul>
+                    <li>Upload your model to HuggingFace.</li>
+                    <li>Submit a configuration file with a pinned commit hash.</li>
+                    <li><strong>No <code>trust_remote_code</code></strong> -- all models must use standard architectures.</li>
+                    <li><strong>Safetensors format only</strong> -- no pickle-based model files.</li>
+                    <li>Evaluation runs air-gapped (no network access during inference).</li>
+                </ul>
+
+                <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--gray-300);">
+
+                <h2>5. Evaluation</h2>
+                <h3>5.1 Public/Private Split</h3>
+                <p>The leaderboard uses a public/private split:</p>
+                <ul>
+                    <li><strong>Public leaderboard:</strong> Evaluated on a subset of held-out data, visible during the competition.</li>
+                    <li><strong>Private leaderboard:</strong> Evaluated on a separate test set, revealed only after the competition ends. Final rankings use the private leaderboard.</li>
+                </ul>
+
+                <h3>5.2 Metrics</h3>
+                <div class="dataset-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Track</th>
+                                <th>Primary Metric</th>
+                                <th>Secondary Metrics</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Track 1: Response Prediction</td>
+                                <td><strong>AUC-ROC</strong></td>
+                                <td>Log-Loss</td>
+                            </tr>
+                            <tr>
+                                <td>Track 2: Robust Scoring</td>
+                                <td><strong>Kendall's Tau</strong></td>
+                                <td>Spearman's Rho, Test-Retest Reliability</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--gray-300);">
+
+                <h2>6. External Resources</h2>
+                <ul>
+                    <li>Use of external data, pretrained models, and publicly available tools is permitted.</li>
+                    <li>All external resources must be publicly available and documented in your submission.</li>
+                    <li>You may not use the private test labels or any information that would constitute data leakage.</li>
+                </ul>
+
+                <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--gray-300);">
+
+                <h2>7. Winner Requirements</h2>
+                <ul>
+                    <li>All winning solutions <strong>must be open-sourced</strong> within 30 days of the competition ending.</li>
+                    <li>Winners must provide a brief write-up describing their methodology.</li>
+                    <li>Winners grant a non-exclusive license for the organizers to use, reproduce, and distribute their solution for research purposes.</li>
+                </ul>
+
+                <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--gray-300);">
+
+                <h2>8. Fair Play</h2>
+                <ul>
+                    <li>One account per individual. Multiple accounts are prohibited.</li>
+                    <li>No sharing of predictions or code between competing teams during the competition.</li>
+                    <li>No reverse-engineering the private test set from public leaderboard feedback.</li>
+                    <li>Organizers reserve the right to disqualify participants for any form of misconduct.</li>
+                </ul>
+
+                <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--gray-300);">
+
+                <h2>9. Timeline</h2>
+                <div class="dataset-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Milestone</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Competition opens</td>
+                                <td><strong>TBD</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Submission deadline</td>
+                                <td><strong>TBD</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Winners announced</td>
+                                <td><strong>TBD</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p style="margin-top: 1rem; color: var(--gray-600);">Dates are tentative and subject to change. The authoritative timeline will be maintained on this website.</p>
+
+                <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--gray-300);">
+
+                <h2>10. Organizer Authority</h2>
+                <p>The organizing committee reserves the right to:</p>
+                <ul>
+                    <li>Modify these rules, the timeline, evaluation metrics, or prize structure at any time before the competition ends.</li>
+                    <li>Disqualify participants at any time if cheating, plagiarism, or misconduct is discovered.</li>
+                    <li>Make final and binding decisions on all competition matters.</li>
+                </ul>
+                <p>If you are uncertain whether your approach violates these rules, please contact the organizers.</p>
+
+                <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--gray-300);">
+
+                <h2>11. Contact</h2>
+                <p>For questions about the rules, please email: <a href="mailto:sttruong@stanford.edu">sttruong@stanford.edu</a></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>Predictive Eval Challenge</h3>
+                    <p>Reframing AI evaluation as a prediction problem. Can we predict unobserved model-item outcomes from partial observations?</p>
+                    <div class="social-links mt-1">
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-x-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="track1.html">Track 1</a></li>
+                        <li><a href="track2.html">Track 2</a></li>
+                        <li><a href="getting_started.html">Getting Started</a></li>
+                        <li><a href="leaderboard.html">Leaderboard</a></li>
+                        <li><a href="rules.html">Rules</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <p>For questions or support:</p>
+                    <p>Email: sttruong@stanford.edu</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 The Predictive AI Evaluation Challenge. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        const mobileToggle = document.querySelector('.mobile-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        mobileToggle.addEventListener('click', () => { navMenu.classList.toggle('active'); });
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => { navMenu.classList.remove('active'); });
+        });
+    </script>
+</body>
+</html>

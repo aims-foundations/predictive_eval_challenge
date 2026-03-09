@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started - Predictive AI Evaluation Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">Predictive Eval Challenge</a>
+            <div class="mobile-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="track1.html">Track 1</a></li>
+                <li><a href="track2.html">Track 2</a></li>
+                <li><a href="getting_started.html">Getting Started</a></li>
+                <li><a href="leaderboard.html">Leaderboard</a></li>
+                <li><a href="rules.html">Rules</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero" style="height: auto; padding: 8rem 0 4rem; min-height: auto;">
+        <div class="container text-center">
+            <div style="font-size: 4rem; margin-bottom: 1.5rem;">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <h1 class="hero-title">Getting Started</h1>
+            <p class="hero-tagline">From installation to your first submission in minutes</p>
+        </div>
+    </section>
+
+    <!-- Step 1: Installation -->
+    <section>
+        <div class="container">
+            <h2 class="mb-2"><span style="color: var(--secondary-color);">Step 1:</span> Install torch_measure</h2>
+            <div class="card">
+                <p>
+                    <code>torch_measure</code> is an open-source PyTorch toolkit for measurement models
+                    (Item Response Theory, factor analysis, and more) applied to AI evaluation.
+                    It provides datasets, baselines, and utilities for both competition tracks.
+                </p>
+                <div class="code-block-container">
+                    <pre><code># Install from PyPI
+pip install torch_measure
+
+# Or install from source for the latest features
+git clone https://github.com/YOUR_REPO/torch_measure.git
+cd torch_measure
+pip install -e .</code></pre>
+                </div>
+                <div class="info-box">
+                    <p>
+                        <strong><i class="fas fa-info-circle"></i> Requirements:</strong>
+                        Python 3.8+, PyTorch 1.12+. All tasks are solvable on CPU. A single GPU will
+                        speed up training but is not required.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Step 2: Load Data -->
+    <section style="background-color: var(--gray-100);">
+        <div class="container">
+            <h2 class="mb-2"><span style="color: var(--secondary-color);">Step 2:</span> Load the Data</h2>
+            <div class="card">
+                <p>
+                    Datasets are available through <code>torch_measure.datasets</code> and also hosted on HuggingFace
+                    for direct download.
+                </p>
+                <div class="code-block-container">
+                    <pre><code>from torch_measure.datasets import load_competition_data
+
+# Load Track 1 data (response prediction)
+track1_data = load_competition_data("track1")
+print(f"Response matrix shape: {track1_data.response_matrix.shape}")
+print(f"Observed entries: {track1_data.observed_mask.sum()}")
+print(f"Held-out entries: {track1_data.held_out_mask.sum()}")
+
+# Load Track 2 data (robust scoring)
+track2_data = load_competition_data("track2")
+print(f"Models: {track2_data.n_models}")
+print(f"Items: {track2_data.n_items}")
+print(f"Contains contaminated data: True")</code></pre>
+                </div>
+                <div class="info-box">
+                    <p>
+                        <strong><i class="fas fa-database"></i> Alternative:</strong>
+                        Datasets are also available on HuggingFace. See the
+                        <code>torch_measure</code> documentation for direct download links.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Step 3: Run Baselines -->
+    <section>
+        <div class="container">
+            <h2 class="mb-2"><span style="color: var(--secondary-color);">Step 3:</span> Run a Baseline</h2>
+            <div class="card">
+                <p>
+                    Several baseline models are included to help you get started and benchmark your approach.
+                </p>
+
+                <h3 class="mt-2">Available Baselines</h3>
+                <div class="dataset-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Model</th>
+                                <th>Description</th>
+                                <th>Track</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Rasch (1PL)</strong></td>
+                                <td>One-parameter logistic IRT model with ability and difficulty parameters</td>
+                                <td>1 &amp; 2</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2PL</strong></td>
+                                <td>Two-parameter logistic model adding item discrimination</td>
+                                <td>1 &amp; 2</td>
+                            </tr>
+                            <tr>
+                                <td><strong>3PL</strong></td>
+                                <td>Three-parameter logistic model adding guessing parameter</td>
+                                <td>1 &amp; 2</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Beta-IRT</strong></td>
+                                <td>IRT with beta-distributed ability scores for bounded estimation</td>
+                                <td>1 &amp; 2</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Amortized IRT</strong></td>
+                                <td>Neural amortized inference for scalable IRT parameter estimation</td>
+                                <td>1 &amp; 2</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4 class="mt-2">Example: Running the Rasch Baseline</h4>
+                <div class="code-block-container">
+                    <pre><code>from torch_measure.models import RaschModel
+from torch_measure.datasets import load_competition_data
+from torch_measure.evaluation import evaluate_track1
+
+# Load data
+data = load_competition_data("track1")
+
+# Fit model
+model = RaschModel(n_models=data.n_models, n_items=data.n_items)
+model.fit(data.response_matrix, data.observed_mask, epochs=100)
+
+# Predict held-out entries
+predictions = model.predict(data.held_out_indices)
+
+# Evaluate
+results = evaluate_track1(predictions, data.held_out_labels)
+print(f"AUC-ROC: {results['auc_roc']:.4f}")
+print(f"Log-Loss: {results['log_loss']:.4f}")</code></pre>
+                </div>
+
+                <h4 class="mt-2">Example: Running a Track 2 Baseline</h4>
+                <div class="code-block-container">
+                    <pre><code>from torch_measure.models import RaschModel
+from torch_measure.datasets import load_competition_data
+from torch_measure.evaluation import evaluate_track2
+
+# Load data (includes contaminated responses)
+data = load_competition_data("track2")
+
+# Fit model (basic -- does not handle contamination)
+model = RaschModel(n_models=data.n_models, n_items=data.n_items)
+model.fit(data.response_matrix, data.observed_mask, epochs=100)
+
+# Extract ability scores
+ability_scores = model.get_ability_scores()
+
+# Evaluate against ground truth ranking
+results = evaluate_track2(ability_scores, data.ground_truth_ranking)
+print(f"Kendall's tau: {results['kendall_tau']:.4f}")
+print(f"Spearman's rho: {results['spearman_rho']:.4f}")</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Step 4: Submit -->
+    <section style="background-color: var(--gray-100);">
+        <div class="container">
+            <h2 class="mb-2"><span style="color: var(--secondary-color);">Step 4:</span> Format & Submit</h2>
+            <div class="card">
+                <p>
+                    Prepare your predictions in CSV format and submit via Codabench.
+                </p>
+
+                <div class="grid-2 mt-2">
+                    <div>
+                        <h4>Track 1: Response Prediction</h4>
+                        <div class="code-block-container">
+                            <pre><code># Generate submission CSV
+import pandas as pd
+
+submission = pd.DataFrame({
+    'model_id': held_out_model_ids,
+    'item_id': held_out_item_ids,
+    'predicted_probability': predictions
+})
+submission.to_csv(
+    'track1_submission.csv',
+    index=False
+)</code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h4>Track 2: Robust Scoring</h4>
+                        <div class="code-block-container">
+                            <pre><code># Generate submission CSV
+import pandas as pd
+
+submission = pd.DataFrame({
+    'model_id': model_ids,
+    'ability_score': ability_scores
+})
+submission.to_csv(
+    'track2_submission.csv',
+    index=False
+)</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-2">
+                    <a href="https://www.codabench.org/competitions/predictive-eval-challenge/" class="btn btn-primary btn-large" target="_blank">
+                        <i class="fas fa-upload"></i>
+                        Submit on Codabench
+                    </a>
+                </div>
+
+                <div class="warning-box mt-2">
+                    <p>
+                        <strong><i class="fas fa-exclamation-triangle"></i> Submission limits:</strong>
+                        2 submissions per day during the competition period, 2 per week post-competition.
+                        Make sure your submission CSV is properly formatted before uploading.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Submission Tracks -->
+    <section>
+        <div class="container">
+            <h2 class="text-center mb-2">Submission Tracks</h2>
+            <div class="grid-3">
+                <div class="card" style="text-align: center;">
+                    <div style="font-size: 2.5rem; color: var(--secondary-color); margin-bottom: 1rem;">
+                        <i class="fas fa-file-csv"></i>
+                    </div>
+                    <h3>Default: CSV Upload</h3>
+                    <p>Upload your predicted probabilities (Track 1) or ability scores (Track 2) as a CSV file. The simplest way to participate.</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <div style="font-size: 2.5rem; color: var(--secondary-color); margin-bottom: 1rem;">
+                        <i class="fab fa-docker"></i>
+                    </div>
+                    <h3>Advanced: Code Submission</h3>
+                    <p>Submit a Docker container with your full pipeline. Two-stage air-gapped evaluation ensures reproducibility and fairness.</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <div style="font-size: 2.5rem; color: var(--secondary-color); margin-bottom: 1rem;">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>LLM Featurizer</h3>
+                    <p>Upload your model to HuggingFace and submit a config with a pinned commit hash. No <code>trust_remote_code</code>; safetensors only.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tips -->
+    <section style="background-color: var(--gray-100);">
+        <div class="container">
+            <h2 class="text-center mb-2">Tips for Success</h2>
+            <div class="card" style="max-width: 800px; margin: 0 auto;">
+                <ul style="line-height: 2;">
+                    <li><strong>Start simple:</strong> Run the baselines first to understand the data format and establish benchmarks.</li>
+                    <li><strong>Leverage metadata:</strong> Model and item metadata (size, dates, categories, embeddings) can substantially improve predictions beyond pure matrix completion.</li>
+                    <li><strong>Cross-validate carefully:</strong> The held-out pattern may differ from random missing entries. Consider structured splits.</li>
+                    <li><strong>For Track 2:</strong> Simple IRT without contamination handling gives a lower bound. The gap between naive and contamination-aware methods is where points are earned.</li>
+                    <li><strong>Ensembles work:</strong> Combining multiple approaches (IRT + matrix factorization + neural models) often outperforms any single method.</li>
+                    <li><strong>CPU is fine:</strong> All baselines and most competitive solutions can train on CPU in minutes to hours.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>Predictive Eval Challenge</h3>
+                    <p>Reframing AI evaluation as a prediction problem. Can we predict unobserved model-item outcomes from partial observations?</p>
+                    <div class="social-links mt-1">
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-x-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="track1.html">Track 1</a></li>
+                        <li><a href="track2.html">Track 2</a></li>
+                        <li><a href="getting_started.html">Getting Started</a></li>
+                        <li><a href="leaderboard.html">Leaderboard</a></li>
+                        <li><a href="rules.html">Rules</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <p>For questions or support:</p>
+                    <p>Email: sttruong@stanford.edu</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 The Predictive AI Evaluation Challenge. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        const mobileToggle = document.querySelector('.mobile-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        mobileToggle.addEventListener('click', () => { navMenu.classList.toggle('active'); });
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => { navMenu.classList.remove('active'); });
+        });
+    </script>
+</body>
+</html>

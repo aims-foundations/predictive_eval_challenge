@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Predictive AI Evaluation Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">Predictive Eval Challenge</a>
+            <div class="mobile-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="track1.html">Track 1</a></li>
+                <li><a href="track2.html">Track 2</a></li>
+                <li><a href="getting_started.html">Getting Started</a></li>
+                <li><a href="leaderboard.html">Leaderboard</a></li>
+                <li><a href="rules.html">Rules</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container text-center">
+            <h1 class="hero-title">The Predictive AI Evaluation Challenge</h1>
+            <p class="hero-tagline">"Can you predict AI behavior from partial observations?"</p>
+            <p class="hero-description">
+                As the number of large language models and evaluation benchmarks grows rapidly, exhaustive evaluation
+                has become infeasible. This challenge reframes evaluation as a prediction problem: given partial and
+                potentially contaminated evaluation data, can we predict unobserved model-item outcomes and recover
+                trustworthy ability scores?
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem;">
+                <a href="https://www.codabench.org/competitions/predictive-eval-challenge/" class="btn btn-primary btn-large" target="_blank">
+                    <i class="fas fa-rocket"></i>
+                    Submit on Codabench
+                </a>
+                <a href="getting_started.html" class="btn btn-outline btn-large" style="border-color: white; color: white;">
+                    <i class="fas fa-book-open"></i>
+                    Getting Started
+                </a>
+            </div>
+            <div class="scroll-indicator" onclick="document.getElementById('tracks').scrollIntoView({behavior: 'smooth'})">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Countdown Timer -->
+    <section style="padding: 2rem 0;">
+        <div class="container">
+            <div class="countdown-container">
+                <h3 class="countdown-title">Submission Deadline</h3>
+                <div class="countdown-timer" id="countdown">
+                    <div class="countdown-segment">
+                        <span class="countdown-value" id="days">--</span>
+                        <span class="countdown-label">Days</span>
+                    </div>
+                    <div class="countdown-segment">
+                        <span class="countdown-value" id="hours">--</span>
+                        <span class="countdown-label">Hours</span>
+                    </div>
+                    <div class="countdown-segment">
+                        <span class="countdown-value" id="minutes">--</span>
+                        <span class="countdown-label">Minutes</span>
+                    </div>
+                    <div class="countdown-segment">
+                        <span class="countdown-value" id="seconds">--</span>
+                        <span class="countdown-label">Seconds</span>
+                    </div>
+                </div>
+                <p class="countdown-message">Deadline: TBD</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Competition Tracks Section -->
+    <section id="tracks">
+        <div class="container">
+            <h2 class="text-center mb-2">Competition Tracks</h2>
+            <p class="text-center mb-2" style="font-size: 1.15rem; max-width: 700px; margin: 0 auto 2rem; color: var(--gray-600);">
+                Two complementary tracks addressing core challenges in predictive AI evaluation.
+                Participate in one or both.
+            </p>
+            <div class="grid-2">
+                <a href="track1.html" class="track-card" style="text-decoration: none; color: inherit;">
+                    <div class="track-icon">
+                        <i class="fas fa-table-cells"></i>
+                    </div>
+                    <h3>Track 1: Response Prediction</h3>
+                    <p>Predict held-out entries in a partially observed binary response matrix of models and items. A structured matrix completion problem with binary outcomes.</p>
+                    <div>
+                        <span class="approach-tag">Matrix Completion</span>
+                        <span class="approach-tag">IRT Models</span>
+                        <span class="approach-tag">Collaborative Filtering</span>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <span class="btn btn-secondary" style="pointer-events: none;">
+                            Explore Track 1 <i class="fas fa-arrow-right"></i>
+                        </span>
+                    </div>
+                </a>
+                <a href="track2.html" class="track-card" style="text-decoration: none; color: inherit;">
+                    <div class="track-icon">
+                        <i class="fas fa-shield-halved"></i>
+                    </div>
+                    <h3>Track 2: Robust Scoring</h3>
+                    <p>Produce scalar ability scores that remain stable under benchmark contamination. Training data includes mixtures of genuine and artificially inflated responses.</p>
+                    <div>
+                        <span class="approach-tag">Contamination Detection</span>
+                        <span class="approach-tag">Mixture Models</span>
+                        <span class="approach-tag">Anomaly Detection</span>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <span class="btn btn-secondary" style="pointer-events: none;">
+                            Explore Track 2 <i class="fas fa-arrow-right"></i>
+                        </span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" style="background-color: var(--gray-100);">
+        <div class="container">
+            <h2 class="text-center mb-2">About the Challenge</h2>
+            <div class="grid-2">
+                <div>
+                    <h3>Why Predictive Evaluation?</h3>
+                    <p>The AI community faces an evaluation bottleneck: hundreds of models, thousands of benchmarks, and limited resources to run every combination. Predictive evaluation treats this as a data science problem -- can we infer the full picture from partial observations?</p>
+                    <p>This challenge brings together ideas from psychometrics (Item Response Theory), recommender systems (matrix factorization), and robust statistics (contamination-aware estimation) to build better tools for understanding AI capabilities.</p>
+                </div>
+                <div>
+                    <h3>Key Research Areas</h3>
+                    <ul>
+                        <li><strong>Matrix Completion:</strong> Predicting unobserved model-item interactions from sparse binary data with rich metadata.</li>
+                        <li><strong>Robust Measurement:</strong> Recovering trustworthy ability scores despite benchmark contamination and data inflation.</li>
+                        <li><strong>Latent Variable Models:</strong> Applying IRT, factor analysis, and neural measurement models to AI evaluation at scale.</li>
+                        <li><strong>Contamination Detection:</strong> Identifying and correcting for artificially inflated benchmark results.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Get Started Section -->
+    <section id="get-started">
+        <div class="container text-center">
+            <h2 class="mb-2">Ready to Get Started?</h2>
+            <p style="font-size: 1.2rem; max-width: 600px; margin: 0 auto 2rem; color: var(--gray-600);">
+                Install the toolkit, explore the baselines, and submit your first predictions.
+            </p>
+            <div class="code-block-container" style="max-width: 500px; margin: 0 auto 2rem; text-align: left;">
+                <pre><code>pip install torch_measure</code></pre>
+            </div>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="getting_started.html" class="btn btn-primary">
+                    <i class="fas fa-book-open"></i>
+                    Getting Started Guide
+                </a>
+                <a href="https://www.codabench.org/competitions/predictive-eval-challenge/" class="btn btn-secondary" target="_blank">
+                    <i class="fas fa-upload"></i>
+                    Submit on Codabench
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section id="timeline" style="background-color: var(--gray-100);">
+        <div class="container">
+            <h2 class="text-center mb-2">Timeline</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <span class="timeline-date">TBD</span>
+                        <h4>Competition Opens</h4>
+                        <p>Registration opens and datasets become available. Baselines and starter code are released.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <span class="timeline-date">TBD</span>
+                        <h4>Submission Deadline</h4>
+                        <p>Final submissions due for both tracks. Public leaderboard freezes.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <span class="timeline-date">TBD</span>
+                        <h4>Winners Announced</h4>
+                        <p>Private leaderboard revealed. Winning teams notified and results published.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prizes & Recognition Section -->
+    <section id="prizes">
+        <div class="container">
+            <h2 class="text-center mb-2">Prizes & Recognition</h2>
+            <div class="grid-3">
+                <div class="prize-card">
+                    <div class="prize-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Leaderboard Prizes</h3>
+                    <p>Performance-based prizes for top-ranking teams in each track, based on primary evaluation metrics (AUC-ROC for Track 1, Kendall's tau for Track 2).</p>
+                </div>
+                <div class="prize-card">
+                    <div class="prize-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>Innovation Awards</h3>
+                    <p>Special recognition for novel methodological contributions, creative approaches, and insightful analysis of the evaluation prediction problem.</p>
+                </div>
+                <div class="prize-card">
+                    <div class="prize-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3>Publication Opportunity</h3>
+                    <p>Winning teams will be invited to contribute to the official competition report and present their methods.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sponsors Section -->
+    <section id="sponsors" style="background-color: var(--gray-100);">
+        <div class="container">
+            <h2 class="text-center mb-2">Sponsors</h2>
+            <div class="sponsors-container">
+                <div class="sponsor-tier">
+                    <div class="sponsor-logos">
+                        <div class="sponsor-item">
+                            <p class="sponsor-placeholder">Sponsor logos coming soon</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 2rem;">
+                    <h3 class="text-center mb-2">Become a Sponsor</h3>
+                    <p class="text-center mb-2" style="font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+                        We are seeking sponsors to support this challenge.
+                        Sponsorship opportunities include prize pool contributions, compute resources, and more.
+                    </p>
+                    <div class="text-center" style="margin-top: 1.5rem;">
+                        <a href="mailto:sttruong@stanford.edu?subject=Predictive%20Eval%20Challenge%20Sponsorship" class="btn btn-primary">
+                            <i class="fas fa-envelope"></i>
+                            Contact Us About Sponsorship
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Organizing Team Section -->
+    <section id="team">
+        <div class="container">
+            <h2 class="text-center mb-2">Organizing Team</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="https://ui-avatars.com/api/?name=ST&background=2c5282&color=fff&size=120" alt="Sang Truong">
+                    <h4>Sang Truong</h4>
+                    <p>Stanford University</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://ui-avatars.com/api/?name=TM&background=2c5282&color=fff&size=120" alt="Team Member">
+                    <h4>TBD</h4>
+                    <p>TBD</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://ui-avatars.com/api/?name=TM&background=2c5282&color=fff&size=120" alt="Team Member">
+                    <h4>TBD</h4>
+                    <p>TBD</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://ui-avatars.com/api/?name=TM&background=2c5282&color=fff&size=120" alt="Team Member">
+                    <h4>TBD</h4>
+                    <p>TBD</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Citation Section -->
+    <section id="citation" style="background-color: var(--gray-100);">
+        <div class="container">
+            <h2 class="text-center mb-2">Cite This Work</h2>
+            <p class="text-center mb-2" style="font-size: 1.1rem; color: var(--gray-600);">
+                If you use this competition in your research, please cite our work:
+            </p>
+            <div class="citation-box">
+                <pre><code>@inproceedings{truong2026predictiveeval,
+  title        = {The Predictive AI Evaluation Challenge},
+  author       = {Truong, Sang},
+  booktitle    = {Competition Track},
+  year         = {2026},
+}</code></pre>
+                <button class="btn-copy" onclick="copyCitation()">
+                    <i class="fas fa-copy"></i>
+                    Copy Citation
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>Predictive Eval Challenge</h3>
+                    <p>Reframing AI evaluation as a prediction problem. Can we predict unobserved model-item outcomes from partial observations?</p>
+                    <div class="social-links mt-1">
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-x-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="track1.html">Track 1</a></li>
+                        <li><a href="track2.html">Track 2</a></li>
+                        <li><a href="getting_started.html">Getting Started</a></li>
+                        <li><a href="leaderboard.html">Leaderboard</a></li>
+                        <li><a href="rules.html">Rules</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <p>For questions or support:</p>
+                    <p>Email: sttruong@stanford.edu</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 The Predictive AI Evaluation Challenge. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile menu toggle
+        const mobileToggle = document.querySelector('.mobile-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        mobileToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Countdown Timer
+        function updateCountdown() {
+            // Placeholder date -- update when deadline is set
+            const endDate = new Date('December 31, 2026 23:59:59 UTC').getTime();
+            const now = new Date().getTime();
+            const timeLeft = endDate - now;
+
+            if (timeLeft > 0) {
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                document.getElementById('days').textContent = String(days).padStart(2, '0');
+                document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+            } else {
+                document.querySelector('.countdown-title').textContent = 'Submissions Closed';
+                document.querySelector('.countdown-timer').innerHTML = '<div style="color: white; font-size: 1.8rem; font-weight: 600;">Thank you for participating!</div>';
+                document.querySelector('.countdown-message').textContent = 'Winners will be announced soon.';
+            }
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // Copy citation function
+        function copyCitation() {
+            const citationText = `@inproceedings{truong2026predictiveeval,
+  title        = {The Predictive AI Evaluation Challenge},
+  author       = {Truong, Sang},
+  booktitle    = {Competition Track},
+  year         = {2026},
+}`;
+            navigator.clipboard.writeText(citationText).then(() => {
+                const button = document.querySelector('.btn-copy');
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                button.style.backgroundColor = '#48bb78';
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.style.backgroundColor = '';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy citation: ', err);
+                alert('Failed to copy citation. Please select and copy the text manually.');
+            });
+        }
+    </script>
+</body>
+</html>
