@@ -1,26 +1,39 @@
 """Sample code submission for the Predictive AI Evaluation Challenge.
 
-This module serves as a template for code submissions. Participants must
-implement the ``train()`` and ``predict()`` functions below.
+Participants must implement two functions:
+    train(train_dir)                         — fit your model on training data
+    predict(train_dir, test_dir, output_dir) — predict on hidden test items
 
-The ingestion program will:
-    1. Import this module.
-    2. Call ``train(data_dir)`` with the path to the input data directory.
-    3. Call ``predict(test_data_dir, output_dir)`` to generate predictions.
+Key concept — amortized prediction:
+    During training, you see item content (text, category, embeddings).
+    During prediction, your CODE receives hidden test item content so your
+    featurizer can process it, but YOU never see the test items directly.
+    This is enforced by the air-gapped Docker container.
 
-Both functions receive string paths. The output directory is where you must
-write your prediction CSV files.
+If you use a custom featurizer (e.g., a fine-tuned LLM encoder), include
+it in your submission ZIP alongside model.py.
 
-Required output files (write at least one):
-    - ``track1_predictions.csv`` — For Track 1 (Response Prediction)
-    - ``track2_scores.csv`` — For Track 2 (Robust Scoring)
+Directory layout provided to your code:
 
-See the starting kit README and baseline scripts for detailed examples.
+    train_dir/
+        train_responses.csv       # model_id, item_id, response (0 or 1)
+        train_items.csv           # item_id, item_text, benchmark, category, ...
+        model_metadata.csv        # model_id, param_count, release_date, org, ...
+        item_embeddings.npy       # (n_train_items, embedding_dim) pre-computed
+
+    test_dir/
+        test_items.csv            # item_id, item_text, benchmark, category, ...
+        test_pairs.csv            # model_id, item_id — pairs to predict
+        test_item_embeddings.npy  # (n_test_items, embedding_dim) pre-computed
+
+Required output:
+    output_dir/track1_predictions.csv
+        Columns: model_id, item_id, predicted_probability
+        One row per (model_id, item_id) pair from test_pairs.csv.
 """
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 
 # ──────────────────────────────────────────────────────────────────────────
@@ -29,117 +42,112 @@ from pathlib import Path
 MODEL = None
 
 
-def train(data_dir: str) -> None:
+def train(train_dir: str) -> None:
     """Train your model on the competition data.
-
-    This function is called once before ``predict()``. Use it to load data,
-    fit your model, and store any state needed for prediction in module-level
-    variables.
 
     Parameters
     ----------
-    data_dir : str
-        Absolute path to the input data directory. Contains:
-            - train_responses.csv           (Track 1 training data)
-            - contaminated_responses.csv    (Track 2 training data)
-            - model_metadata.csv            (model attributes)
-            - item_metadata.csv             (item attributes)
-            - item_embeddings.npy           (pre-computed item embeddings)
-            - test_pairs.csv                (Track 1: pairs to predict)
-
-    Notes
-    -----
-    - You can import any libraries available in the Docker image
-      (pytorch/pytorch:2.1.0-cuda12.1-cudnn8-runtime) plus any packages
-      listed in your submission's requirements.txt.
-    - GPU is available via torch.cuda.
-    - Time limit: 30 min (Development) / 60 min (Final) for train+predict combined.
+    train_dir : str
+        Path to training data directory containing:
+            - train_responses.csv     (model_id, item_id, response)
+            - train_items.csv         (item_id, item_text, benchmark, ...)
+            - model_metadata.csv      (model_id, param_count, ...)
+            - item_embeddings.npy     (pre-computed item embeddings)
     """
     global MODEL
 
-    data_path = Path(data_dir)
+    train_path = Path(train_dir)
 
-    # ── Example: Load data ────────────────────────────────────────────────
+    # ── Example using torch_measure ────────────────────────────────────
     # import pandas as pd
     # import numpy as np
     # import torch
-    # from torch_measure.datasets import load_csv
-    # from torch_measure.models import Rasch  # or TwoPL, AmortizedIRT, etc.
+    # from torch_measure.models import AmortizedIRT
     #
-    # rm = load_csv(str(data_path / "train_responses.csv"))
-    # model = Rasch(n_subjects=rm.n_subjects, n_items=rm.n_items, device="cuda")
-    # model.fit(rm.data.cuda(), max_epochs=1000, lr=0.01)
-    # MODEL = {"model": model, "rm": rm}
+    # responses = pd.read_csv(train_path / "train_responses.csv")
+    # items = pd.read_csv(train_path / "train_items.csv")
+    # embeddings = np.load(train_path / "item_embeddings.npy")
+    #
+    # # Build response matrix from long-form CSV
+    # ...
+    #
+    # model = AmortizedIRT(
+    #     n_subjects=n_models,
+    #     n_items=n_items,
+    #     embedding_dim=embeddings.shape[1],
+    #     device="cuda" if torch.cuda.is_available() else "cpu",
+    # )
+    # model.fit(response_matrix, embeddings=torch.tensor(embeddings, dtype=torch.float32))
+    # MODEL = {"model": model, "items": items, "embeddings": embeddings}
 
-    # TODO: Replace this placeholder with your training code.
+    # TODO: Replace with your training code.
     print("[model.py] train() called — implement your training logic here.")
-    MODEL = {"data_dir": data_dir}
+    MODEL = {"train_dir": train_dir}
 
 
-def predict(test_data_dir: str, output_dir: str) -> None:
-    """Generate predictions and write them to the output directory.
+def predict(train_dir: str, test_dir: str, output_dir: str) -> None:
+    """Generate predictions for hidden test items.
 
-    This function is called after ``train()``. Use the trained model to
-    produce predictions and write them as CSV files.
+    Your featurizer processes the test item content here. You have access
+    to item text and pre-computed embeddings for the test items.
 
     Parameters
     ----------
-    test_data_dir : str
-        Absolute path to the input data directory (same as train's data_dir).
+    train_dir : str
+        Path to training data (same as in train()).
+    test_dir : str
+        Path to hidden test data containing:
+            - test_items.csv            (item_id, item_text, benchmark, ...)
+            - test_pairs.csv            (model_id, item_id pairs to predict)
+            - test_item_embeddings.npy  (pre-computed embeddings for test items)
     output_dir : str
-        Absolute path to the output directory. Write your prediction files here:
-            - track1_predictions.csv  (columns: model_id, item_id, predicted_probability)
-            - track2_scores.csv       (columns: model_id, ability_score)
-
-    Notes
-    -----
-    You must write at least one of the two files. If you are only competing
-    in one track, write only that track's file.
+        Write track1_predictions.csv here.
     """
     global MODEL
 
+    test_path = Path(test_dir)
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
-    data_path = Path(test_data_dir)
 
-    # ── Example: Track 1 predictions ──────────────────────────────────────
+    # ── Example ────────────────────────────────────────────────────────
     # import pandas as pd
+    # import numpy as np
     # import torch
     #
+    # test_pairs = pd.read_csv(test_path / "test_pairs.csv")
+    # test_items = pd.read_csv(test_path / "test_items.csv")
+    # test_embeddings = np.load(test_path / "test_item_embeddings.npy")
+    #
     # model = MODEL["model"]
-    # rm = MODEL["rm"]
-    # test_pairs = pd.read_csv(data_path / "test_pairs.csv")
     #
-    # subject_to_idx = {s: i for i, s in enumerate(rm.subject_ids)}
-    # item_to_idx = {s: i for i, s in enumerate(rm.item_ids)}
-    #
+    # # Use the amortized model to predict on new items via their embeddings:
+    # # The model maps embeddings -> item parameters, then computes P(correct).
     # with torch.no_grad():
-    #     prob_matrix = model.predict().cpu().numpy()
+    #     test_emb_tensor = torch.tensor(test_embeddings, dtype=torch.float32)
+    #     # predict_new_items() takes embeddings for unseen items and returns
+    #     # a probability matrix of shape (n_models, n_test_items)
+    #     prob_matrix = model.predict_new_items(test_emb_tensor).cpu().numpy()
+    #
+    # # Or, if you have a custom featurizer:
+    # # test_emb = my_featurizer.encode(test_items["item_text"].tolist())
+    # # prob_matrix = model.predict_new_items(test_emb).cpu().numpy()
     #
     # predictions = []
     # for _, row in test_pairs.iterrows():
     #     si = subject_to_idx[str(row["model_id"])]
-    #     ii = item_to_idx[str(row["item_id"])]
+    #     ii = test_item_to_idx[str(row["item_id"])]
     #     predictions.append({
     #         "model_id": row["model_id"],
     #         "item_id": row["item_id"],
     #         "predicted_probability": float(prob_matrix[si, ii]),
     #     })
     #
-    # pd.DataFrame(predictions).to_csv(output_path / "track1_predictions.csv", index=False)
+    # pd.DataFrame(predictions).to_csv(
+    #     output_path / "track1_predictions.csv", index=False
+    # )
 
-    # ── Example: Track 2 scores ───────────────────────────────────────────
-    # import torch
-    #
-    # with torch.no_grad():
-    #     abilities = model.ability.cpu().numpy()
-    #
-    # pd.DataFrame({
-    #     "model_id": rm.subject_ids,
-    #     "ability_score": abilities,
-    # }).to_csv(output_path / "track2_scores.csv", index=False)
-
-    # TODO: Replace this placeholder with your prediction logic.
+    # TODO: Replace with your prediction code.
     print("[model.py] predict() called — implement your prediction logic here.")
-    print(f"  test_data_dir: {test_data_dir}")
+    print(f"  train_dir: {train_dir}")
+    print(f"  test_dir: {test_dir}")
     print(f"  output_dir: {output_dir}")

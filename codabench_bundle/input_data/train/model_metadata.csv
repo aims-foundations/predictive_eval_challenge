@@ -1,0 +1,51 @@
+model_id,org,param_count,is_instruct
+allenai/olmo-7b,Allen AI,7B,False
+meta/llama-2-13b,Meta,13B,False
+microsoft/phi-2,Microsoft,,False
+meta/llama-3.2-11b-vision-instruct-turbo,Meta,11B,True
+meta/llama-3.1-8b-instruct-turbo,Meta,8B,True
+cohere/command-r,Cohere,,False
+mistralai/mistral-7b-v0.1,Mistral AI,7B,False
+cohere/command-r-plus,Cohere,,False
+databricks/dbrx-instruct,Databricks,,True
+openai/gpt-3.5-turbo-0613,OpenAI,,False
+openai/gpt-3.5-turbo-0125,OpenAI,,False
+meta/llama-2-70b,Meta,70B,False
+mistralai/open-mistral-nemo-2407,Mistral AI,,False
+ai21/jamba-instruct,AI21 Labs,,True
+google/gemma-7b,Google,7B,False
+mistralai/mistral-small-2402,Mistral AI,,False
+google/text-bison@001,Google,,False
+deepseek-ai/deepseek-llm-67b-chat,DeepSeek,67B,True
+mistralai/mixtral-8x7b-32kseqlen,Mistral AI,7B,False
+google/gemini-1.0-pro-001,Google,,False
+google/gemma-2-9b,Google,9B,False
+google/gemini-1.5-flash-002,Google,,False
+anthropic/claude-2.1,Anthropic,,False
+anthropic/claude-3-haiku-20240307,Anthropic,,False
+qwen/qwen2.5-7b-instruct-turbo,Qwen,7B,True
+meta/llama-3.1-70b-instruct-turbo,Meta,70B,True
+01-ai/yi-34b,01.AI,34B,False
+qwen/qwen1.5-32b,Qwen,32B,False
+microsoft/phi-3-small-8k-instruct,Microsoft,,True
+qwen/qwen1.5-110b-chat,Qwen,110B,True
+google/gemma-2-27b,Google,27B,False
+google/gemini-1.5-flash-001,Google,,False
+01-ai/yi-large-preview,01.AI,,False
+amazon/nova-lite-v1:0,Amazon,,False
+qwen/qwen1.5-72b,Qwen,72B,False
+google/text-unicorn@001,Google,,False
+ai21/jamba-1.5-large,AI21 Labs,,False
+openai/gpt-4o-2024-05-13,OpenAI,,False
+qwen/qwen2-72b-instruct,Qwen,72B,True
+meta/llama-3.1-405b-instruct-turbo,Meta,405B,True
+openai/gpt-4-1106-preview,OpenAI,,False
+openai/gpt-4-turbo-2024-04-09,OpenAI,,False
+meta/llama-3.3-70b-instruct-turbo,Meta,70B,True
+google/gemini-2.0-flash-exp,Google,,False
+openai/gpt-4-0613,OpenAI,,False
+meta/llama-3.2-90b-vision-instruct-turbo,Meta,90B,True
+google/gemini-1.5-pro-preview-0409,Google,,False
+amazon/nova-pro-v1:0,Amazon,,False
+qwen/qwen2.5-72b-instruct-turbo,Qwen,72B,True
+anthropic/claude-3-5-sonnet-20241022,Anthropic,,False

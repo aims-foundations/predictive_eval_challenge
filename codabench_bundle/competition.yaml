@@ -1,18 +1,10 @@
 version: 2
 
-title: "Predictive AI Evaluation Challenge"
-description: >
-  Can we predict how AI models will perform on unseen benchmarks?
-  This challenge explores two complementary tasks: response prediction
-  (matrix completion on model-item response matrices) and robust scoring
-  (producing ability estimates that resist benchmark contamination).
+title: Predictive AI Evaluation Challenge
+description: Can we predict how AI models will perform on unseen benchmark items?
 image: logo.png
-registration_auto_approve: true
-docker_image: "pytorch/pytorch:2.1.0-cuda12.1-cudnn8-runtime"
-contact_email: "predictive-eval-challenge@example.org"
-enable_detailed_results: true
-forum_enabled: true
-can_participants_make_submissions_public: true
+registration_auto_approve: True
+docker_image: 'codalab/codalab-legacy:py37'
 
 terms: pages/terms.md
 
@@ -21,101 +13,69 @@ pages:
     file: pages/description.md
   - title: Evaluation
     file: pages/evaluation.md
-  - title: Terms and Conditions
-    file: pages/terms.md
   - title: Data
     file: pages/data.md
+  - title: Terms and Conditions
+    file: pages/terms.md
 
-# ---------------------------------------------------------------------------
-# Tasks
-# ---------------------------------------------------------------------------
 tasks:
   - index: 0
-    name: "Track 1 — Response Prediction (Dev)"
-    description: "Matrix completion: predict binary model-item responses."
-    scoring_program: scoring_program
+    name: Amortized Prediction (Dev)
+    description: Development phase. Predict model performance on new unseen items.
+    is_public: false
+    input_data: input_data
     reference_data: reference_data
+    scoring_program: scoring_program
     ingestion_program: ingestion_program
-
   - index: 1
-    name: "Track 2 — Robust Scoring (Dev)"
-    description: "Produce contamination-robust ability scores."
-    scoring_program: scoring_program
+    name: Amortized Prediction (Final)
+    description: Final phase. Submissions evaluated on held-out test data.
+    is_public: false
+    input_data: input_data
     reference_data: reference_data
+    scoring_program: scoring_program
     ingestion_program: ingestion_program
 
-  - index: 2
-    name: "Track 1 — Response Prediction (Final)"
-    description: "Matrix completion on private held-out data."
-    scoring_program: scoring_program
-    reference_data: reference_data
-    ingestion_program: ingestion_program
-
-  - index: 3
-    name: "Track 2 — Robust Scoring (Final)"
-    description: "Robust scoring on private held-out data."
-    scoring_program: scoring_program
-    reference_data: reference_data
-    ingestion_program: ingestion_program
-
-# ---------------------------------------------------------------------------
-# Phases
-# ---------------------------------------------------------------------------
-phases:
-  - index: 0
-    name: "Development Phase"
-    description: "Public leaderboard. Use the provided development data to iterate on your approach."
-    start: 2026-04-01
-    end: 2026-07-01
-    max_submissions_per_day: 5
-    execution_time_limit: 1800
-    tasks: [0, 1]
-    starting_kit: starting_kit
-    public_data: reference_data
-
-  - index: 1
-    name: "Final Phase"
-    description: "Private leaderboard. Submissions are evaluated on held-out test data."
-    start: 2026-07-01
-    end: 2026-08-01
-    max_submissions_per_day: 2
-    execution_time_limit: 3600
-    auto_migrate_to_this_phase: false
-    tasks: [2, 3]
-
-# ---------------------------------------------------------------------------
-# Solutions (baseline references for organizer testing)
-# ---------------------------------------------------------------------------
 solutions: []
 
-# ---------------------------------------------------------------------------
-# Leaderboards
-# ---------------------------------------------------------------------------
+phases:
+  - index: 0
+    name: Development
+    description: Submit your prediction pipeline. Feedback on validation set.
+    start: 4-1-2026
+    end: 6-30-2026
+    max_submissions_per_day: 5
+    max_submissions: 100
+    execution_time_limit: 1800
+    tasks:
+      - 0
+    solutions: []
+  - index: 1
+    name: Final
+    description: Submissions evaluated on separate held-out test set.
+    start: 7-1-2026
+    end: 8-1-2026
+    max_submissions_per_day: 2
+    max_submissions: 50
+    execution_time_limit: 3600
+    tasks:
+      - 1
+    solutions: []
+
 leaderboards:
-  - title: "Track 1 — Response Prediction"
+  - index: 0
+    title: Amortized Prediction
     key: track1
     columns:
-      - title: "AUC-ROC"
+      - title: AUC-ROC
         key: track1_auc_roc
         index: 0
         sorting: desc
-        precision: 4
-      - title: "Log-Loss"
+        computation: null
+        computation_indexes: null
+      - title: Log-Loss
         key: track1_log_loss
         index: 1
         sorting: asc
-        precision: 4
-
-  - title: "Track 2 — Robust Scoring"
-    key: track2
-    columns:
-      - title: "Kendall Tau"
-        key: track2_kendall_tau
-        index: 0
-        sorting: desc
-        precision: 4
-      - title: "Spearman Rho"
-        key: track2_spearman_rho
-        index: 1
-        sorting: desc
-        precision: 4
+        computation: null
+        computation_indexes: null

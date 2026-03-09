@@ -1,29 +1,34 @@
 #!/usr/bin/env python3
 """Ingestion program for the Predictive AI Evaluation Challenge.
 
-This script handles **code submissions**. It loads the participant's model.py,
-calls their train() and predict() functions, and writes predictions to the
-output directory for the scoring program.
+This script handles code submissions for amortized prediction. It loads the
+participant's model.py, calls their train() and predict() functions, and
+writes predictions to the output directory for the scoring program.
+
+Key design: participants train on items whose content they can see. At test
+time, their *code* receives hidden test item content (text, embeddings) so
+their featurizer can process it, but the participant never directly sees
+the test items — enforced by the air-gapped Docker container.
 
 Usage (called by Codabench via metadata.yaml):
     python3 ingestion.py <input_data_dir> <output_dir> <program_dir> <submission_dir>
 
 Directory layout:
-    <input_data_dir>/   # Competition input data (training + test data)
-        train_responses.csv
-        contaminated_responses.csv
-        model_metadata.csv
-        item_metadata.csv
-        item_embeddings.npy
-        test_pairs.csv
-    <output_dir>/       # Where predictions are written (passed to scoring)
+    <input_data_dir>/
+        train/                      # Training data (participant can inspect)
+            train_responses.csv     # Partial response matrix (model_id, item_id, response)
+            train_items.csv         # Item content: item_id, item_text, benchmark, category, ...
+            model_metadata.csv      # model_id, param_count, release_date, org, ...
+            item_embeddings.npy     # Pre-computed embeddings for training items (optional)
+        test/                       # Hidden test data (only code sees this)
+            test_items.csv          # item_id, item_text, benchmark, category, ...
+            test_pairs.csv          # (model_id, item_id) pairs to predict
+            test_item_embeddings.npy  # Pre-computed embeddings for test items (optional)
+    <output_dir>/                   # Where predictions are written (passed to scoring)
         track1_predictions.csv
-        track2_scores.csv
-    <program_dir>/      # This ingestion program
-    <submission_dir>/   # Participant's code (unzipped)
-        model.py
-        metadata.yaml
-        (other participant files)
+    <submission_dir>/               # Participant's code (unzipped)
+        model.py                    # Must implement train() and predict()
+        (featurizer weights, configs, helper modules, etc.)
 """
 
 from __future__ import annotations
@@ -49,28 +54,17 @@ START_TIME = time.time()
 TIME_LIMIT = int(os.environ.get("INGESTION_TIME_LIMIT", 1800))
 
 
-class TimeoutError(Exception):
+class TimeLimitExceeded(Exception):
     """Raised when participant code exceeds the time limit."""
     pass
 
 
 def timeout_handler(signum, frame):
-    raise TimeoutError(f"Participant code exceeded the time limit of {TIME_LIMIT} seconds.")
+    raise TimeLimitExceeded(f"Participant code exceeded the time limit of {TIME_LIMIT} seconds.")
 
 
 def load_participant_module(submission_dir: Path):
-    """Dynamically import the participant's model.py.
-
-    Parameters
-    ----------
-    submission_dir : Path
-        Directory containing the participant's code submission.
-
-    Returns
-    -------
-    module
-        The loaded Python module.
-    """
+    """Dynamically import the participant's model.py."""
     model_path = submission_dir / "model.py"
 
     if not model_path.exists():
@@ -80,7 +74,7 @@ def load_participant_module(submission_dir: Path):
         )
 
     # Add submission directory to sys.path so participant can import their
-    # own helper modules.
+    # own helper modules / featurizer code.
     sys.path.insert(0, str(submission_dir))
 
     spec = importlib.util.spec_from_file_location("participant_model", str(model_path))
@@ -97,12 +91,12 @@ def validate_module(module) -> None:
     """Check that the participant module implements the required interface."""
     if not hasattr(module, "train"):
         raise AttributeError(
-            "model.py must define a train(data_dir) function. "
+            "model.py must define a train(train_dir) function. "
             "See the starting kit for an example."
         )
     if not hasattr(module, "predict"):
         raise AttributeError(
-            "model.py must define a predict(test_data_dir, output_dir) function. "
+            "model.py must define a predict(train_dir, test_dir, output_dir) function. "
             "See the starting kit for an example."
         )
     if not callable(module.train):
@@ -127,23 +121,22 @@ def main():
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    train_dir = input_data_dir / "train"
+    test_dir = input_data_dir / "test"
+
     log(f"Input data directory: {input_data_dir}")
+    log(f"  Train directory: {train_dir}")
+    log(f"  Test directory: {test_dir}")
     log(f"Output directory: {output_dir}")
-    log(f"Program directory: {program_dir}")
     log(f"Submission directory: {submission_dir}")
     log(f"Time limit: {TIME_LIMIT}s")
 
     # List available files
-    if input_data_dir.exists():
-        log(f"Input data files: {sorted(os.listdir(input_data_dir))}")
-    else:
-        log(f"WARNING: Input data directory does not exist: {input_data_dir}")
-
-    if submission_dir.exists():
-        log(f"Submission files: {sorted(os.listdir(submission_dir))}")
-    else:
-        log(f"ERROR: Submission directory does not exist: {submission_dir}")
-        sys.exit(1)
+    for label, d in [("Train", train_dir), ("Test", test_dir), ("Submission", submission_dir)]:
+        if d.exists():
+            log(f"{label} files: {sorted(os.listdir(d))}")
+        else:
+            log(f"WARNING: {label} directory does not exist: {d}")
 
     # Set time limit via signal (Unix only)
     try:
@@ -160,17 +153,20 @@ def main():
         validate_module(module)
         log("model.py loaded and validated successfully.")
 
-        # Step 2: Train
-        log("Calling participant's train() function ...")
+        # Step 2: Train — participant sees training items (content visible)
+        log("Calling participant's train(train_dir) ...")
         train_start = time.time()
-        module.train(str(input_data_dir))
+        module.train(str(train_dir))
         train_elapsed = time.time() - train_start
         log(f"train() completed in {train_elapsed:.1f}s")
 
-        # Step 3: Predict
-        log("Calling participant's predict() function ...")
+        # Step 3: Predict — code receives hidden test items
+        # The participant's featurizer processes test item content here.
+        # The participant never directly sees the test items because the
+        # container is air-gapped (no network access).
+        log("Calling participant's predict(train_dir, test_dir, output_dir) ...")
         predict_start = time.time()
-        module.predict(str(input_data_dir), str(output_dir))
+        module.predict(str(train_dir), str(test_dir), str(output_dir))
         predict_elapsed = time.time() - predict_start
         log(f"predict() completed in {predict_elapsed:.1f}s")
 
@@ -178,20 +174,15 @@ def main():
         log(f"Output directory contents: {sorted(os.listdir(output_dir))}")
 
         t1_exists = (output_dir / "track1_predictions.csv").exists()
-        t2_exists = (output_dir / "track2_scores.csv").exists()
-
-        if not t1_exists and not t2_exists:
+        if not t1_exists:
             log(
-                "WARNING: Neither track1_predictions.csv nor track2_scores.csv "
-                "found in output directory. The scoring program will report an error."
+                "WARNING: track1_predictions.csv not found in output directory. "
+                "The scoring program will report an error."
             )
         else:
-            if t1_exists:
-                log("track1_predictions.csv found.")
-            if t2_exists:
-                log("track2_scores.csv found.")
+            log("track1_predictions.csv found.")
 
-    except TimeoutError as e:
+    except TimeLimitExceeded as e:
         log(f"TIMEOUT: {e}")
         sys.exit(2)
     except Exception as e:
