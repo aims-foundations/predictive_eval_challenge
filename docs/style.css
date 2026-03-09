@@ -1,9 +1,9 @@
 :root {
     --primary-color: #1e293b; /* Slate */
-    --secondary-color: #f97316; /* Warm orange */
-    --accent-color: #f97316; /* Orange for CTAs */
-    --accent-hover: #ea580c;
-    --highlight-color: #2563eb; /* Clean blue for links */
+    --secondary-color: #a855f7; /* Purple */
+    --accent-color: #a855f7; /* Purple for CTAs */
+    --accent-hover: #9333ea;
+    --highlight-color: #7c3aed; /* Violet for links */
     --dark-color: #0f172a;
     --light-color: #ffffff;
     --gray-100: #f9fafb;
@@ -85,7 +85,7 @@ a:hover {
     background-color: var(--accent-hover);
     color: white;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
 }
 
 .btn-secondary {
@@ -199,7 +199,7 @@ header {
 
 /* Hero Section */
 .hero {
-    background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 25%, #e0f2fe 50%, #f0fdf4 75%, #fefce8 100%);
+    background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 30%, #f3e8ff 60%, #ede9fe 100%);
     color: #2d3748;
     padding: 6rem 0 3rem;
     min-height: 50vh;
@@ -216,8 +216,8 @@ header {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(ellipse at 30% 50%, rgba(249, 115, 22, 0.08) 0%, transparent 60%),
-                radial-gradient(ellipse at 70% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 60%);
+    background: radial-gradient(ellipse at 30% 50%, rgba(236, 72, 153, 0.1) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(168, 85, 247, 0.1) 0%, transparent 60%);
     animation: subtleShift 12s ease-in-out infinite alternate;
 }
 
@@ -537,7 +537,7 @@ section {
     top: 0;
     bottom: 0;
     width: 3px;
-    background: linear-gradient(to bottom, var(--secondary-color), #fb923c);
+    background: linear-gradient(to bottom, var(--secondary-color), #ec4899);
     border-radius: 2px;
 }
 
